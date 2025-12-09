@@ -1002,12 +1002,28 @@ Fast distributed SQL query engine for big data analytics that helps you explore 
   ```
 * `gateway.rules` - list, default: `[]`  
 
-  HTTPRoute rules for routing traffic to Trino.
-  Example:
+  HTTPRoute rules for routing traffic to Trino. Each rule can use either the simplified `path` format for basic routing, or the full `matches` format for advanced use cases.
+  Simple path-based routing example:
   ```yaml
    - path:
        type: PathPrefix
        value: /
+     filters:
+       - type: RequestHeaderModifier
+         requestHeaderModifier:
+           set:
+             - name: X-Forwarded-Proto
+               value: https
+  ```
+  Advanced matching example with headers:
+  ```yaml
+   - matches:
+       - path:
+           type: PathPrefix
+           value: /ui
+         headers:
+           - name: X-Custom-Header
+             value: custom-value
      filters:
        - type: RequestHeaderModifier
          requestHeaderModifier:
