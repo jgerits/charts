@@ -1,6 +1,6 @@
 # trino
 
-![Version: 1.41.0](https://img.shields.io/badge/Version-1.41.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 477](https://img.shields.io/badge/AppVersion-477-informational?style=flat-square)
+![Version: 1.42.0](https://img.shields.io/badge/Version-1.42.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 477](https://img.shields.io/badge/AppVersion-477-informational?style=flat-square)
 
 Fast distributed SQL query engine for big data analytics that helps you explore your data universe
 
@@ -968,6 +968,52 @@ Fast distributed SQL query engine for big data analytics that helps you explore 
    - secretName: chart-example-tls
      hosts:
        - chart-example.local
+  ```
+* `gateway.enabled` - bool, default: `false`  
+
+  Set to true to create HTTPRoute resources for [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/). The Gateway API is the successor to the Ingress API and provides more advanced routing capabilities.
+  > [!NOTE]
+  > - Requires Gateway API CRDs to be installed in the cluster
+  > - Cannot be used together with `ingress.enabled`
+  > - Requires a Gateway resource to be configured separately
+* `gateway.annotations` - object, default: `{}`  
+
+  Annotations to add to the HTTPRoute resource.
+  Example:
+  ```yaml
+   gateway.networking.k8s.io/example: "value"
+  ```
+* `gateway.parentRefs` - list, default: `[]`  
+
+  References to the Gateway resources that this HTTPRoute should attach to.
+  Example:
+  ```yaml
+   - name: trino-gateway
+     namespace: gateway-system
+     sectionName: https
+  ```
+* `gateway.hostnames` - list, default: `[]`  
+
+  Hostnames to match for routing traffic.
+  Example:
+  ```yaml
+   - trino.example.com
+   - trino-prod.example.com
+  ```
+* `gateway.rules` - list, default: `[]`  
+
+  HTTPRoute rules for routing traffic to Trino.
+  Example:
+  ```yaml
+   - path:
+       type: PathPrefix
+       value: /
+     filters:
+       - type: RequestHeaderModifier
+         requestHeaderModifier:
+           set:
+             - name: X-Forwarded-Proto
+               value: https
   ```
 * `networkPolicy.enabled` - bool, default: `false`  
 
