@@ -974,7 +974,7 @@ Fast distributed SQL query engine for big data analytics that helps you explore 
   Set to true to create HTTPRoute resources for [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/). The Gateway API is the successor to the Ingress API and provides more advanced routing capabilities.
   > [!NOTE]
   > - Requires Gateway API CRDs to be installed in the cluster
-  > - Cannot be used together with `ingress.enabled`
+  > - Not recommended to use together with `ingress.enabled` (choose one or the other)
   > - Requires a Gateway resource to be configured separately
 * `gateway.annotations` - object, default: `{}`  
 

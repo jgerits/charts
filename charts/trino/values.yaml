@@ -1186,7 +1186,7 @@ gateway:
   # @raw
   # > [!NOTE]
   # > - Requires Gateway API CRDs to be installed in the cluster
-  # > - Cannot be used together with `ingress.enabled`
+  # > - Not recommended to use together with `ingress.enabled` (choose one or the other)
   # > - Requires a Gateway resource to be configured separately
   enabled: false
   annotations: {}
