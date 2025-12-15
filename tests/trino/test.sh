@@ -11,6 +11,7 @@ declare -A testCases=(
     [exchange_manager_values]="--values test-exchange-manager-values.yaml"
     [graceful_shutdown]="--values test-graceful-shutdown-values.yaml"
     [resource_groups_properties]="--values test-resource-groups-properties-values.yaml"
+    [gateway]="--values test-gateway-values.yaml"
 )
 
 declare -A testCaseCharts=(
@@ -22,6 +23,7 @@ declare -A testCaseCharts=(
     [exchange_manager_values]="../../charts/trino"
     [graceful_shutdown]="../../charts/trino"
     [resource_groups_properties]="../../charts/trino"
+    [gateway]="../../charts/trino"
 )
 
 function join_by {
@@ -41,7 +43,7 @@ CT_ARGS=(
     --helm-extra-args="--timeout 2m"
 )
 CLEANUP_NAMESPACE=true
-TEST_NAMES=(default single_node complete_values access_control_properties_values exchange_manager_values graceful_shutdown resource_groups_properties)
+TEST_NAMES=(default single_node complete_values access_control_properties_values exchange_manager_values graceful_shutdown resource_groups_properties gateway)
 
 usage() {
     cat <<EOF 1>&2

@@ -1,0 +1,57 @@
+# Example values for production Gateway API configuration with TLS
+# This demonstrates how to use the Kubernetes Gateway API with Trino
+
+server:
+  workers: 3
+  config:
+    https:
+      enabled: false  # Gateway handles TLS termination
+  autoscaling:
+    enabled: false
+
+# Gateway API configuration
+gateway:
+  enabled: true
+  
+  # Annotations for the HTTPRoute resource
+  annotations:
+    # Example: add custom annotations if needed
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  
+  # Reference to the Gateway resource (must be created separately)
+  parentRefs:
+    - name: production-gateway
+      namespace: gateway-system
+      # Optional: specify a listener/section name if the Gateway has multiple listeners
+      sectionName: https
+  
+  # Hostnames that this route should respond to
+  hostnames:
+    - trino.example.com
+    - trino-prod.example.com
+  
+  # Routing rules
+  rules:
+    # Rule 1: Route all traffic to Trino with header modifications
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      filters:
+        # Add headers for proper HTTPS forwarding
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: X-Forwarded-Proto
+                value: https
+              - name: X-Forwarded-Port
+                value: "443"
+
+# Disable Ingress since we're using Gateway API
+ingress:
+  enabled: false
+
+# Optional: Configure service type
+service:
+  type: ClusterIP
+  port: 8080
